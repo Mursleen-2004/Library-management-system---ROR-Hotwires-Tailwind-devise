@@ -1,0 +1,55 @@
+<h1 class="text-2xl font-bold text-slate-900 mb-6">Admin Dashboard</h1>
+
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+  <div class="bg-white rounded-xl border border-slate-200 p-5">
+    <p class="text-xs text-slate-400 uppercase tracking-wide">Total Books</p>
+    <p class="text-2xl font-bold text-slate-900 mt-1"><%= @total_books %></p>
+  </div>
+  <div class="bg-white rounded-xl border border-slate-200 p-5">
+    <p class="text-xs text-slate-400 uppercase tracking-wide">Total Copies</p>
+    <p class="text-2xl font-bold text-slate-900 mt-1"><%= @total_copies %></p>
+  </div>
+  <div class="bg-white rounded-xl border border-slate-200 p-5">
+    <p class="text-xs text-slate-400 uppercase tracking-wide">Registered Users</p>
+    <p class="text-2xl font-bold text-slate-900 mt-1"><%= @total_users %></p>
+  </div>
+  <div class="bg-white rounded-xl border border-slate-200 p-5">
+    <p class="text-xs text-slate-400 uppercase tracking-wide">Active Borrowings</p>
+    <p class="text-2xl font-bold text-slate-900 mt-1"><%= @active_borrowings %></p>
+  </div>
+</div>
+
+<% if @overdue_borrowings > 0 %>
+  <div class="mb-8 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 px-4 py-3 text-sm">
+    <%= pluralize(@overdue_borrowings, "book") %> currently overdue.
+    <%= link_to "View all borrowings", borrowings_path, class: "underline font-medium" %>
+  </div>
+<% end %>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <div class="bg-white rounded-2xl border border-slate-200 p-6">
+    <h2 class="font-semibold text-slate-900 mb-4">Recent Borrowings</h2>
+    <ul class="divide-y divide-slate-100">
+      <% @recent_borrowings.each do |b| %>
+        <li class="py-3 flex justify-between text-sm">
+          <span class="text-slate-700"><%= b.book.title %></span>
+          <span class="text-slate-400"><%= b.user.name %></span>
+        </li>
+      <% end %>
+    </ul>
+    <% if @recent_borrowings.empty? %><p class="text-sm text-slate-400">No activity yet.</p><% end %>
+  </div>
+
+  <div class="bg-white rounded-2xl border border-slate-200 p-6">
+    <h2 class="font-semibold text-slate-900 mb-4">Most Popular Books</h2>
+    <ul class="divide-y divide-slate-100">
+      <% @popular_books.each do |book| %>
+        <li class="py-3 flex justify-between text-sm">
+          <span class="text-slate-700"><%= book.title %></span>
+          <span class="text-slate-400"><%= pluralize(book.borrowings.count, "borrow") %></span>
+        </li>
+      <% end %>
+    </ul>
+    <% if @popular_books.empty? %><p class="text-sm text-slate-400">No activity yet.</p><% end %>
+  </div>
+</div>

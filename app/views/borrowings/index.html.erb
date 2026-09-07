@@ -1,0 +1,48 @@
+<h1 class="text-2xl font-bold text-slate-900 mb-6">
+  <%= current_user.admin? ? "All Borrowings" : "My Borrowings" %>
+</h1>
+
+<div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+  <table class="w-full text-sm">
+    <thead class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wide">
+      <tr>
+        <th class="text-left px-5 py-3">Book</th>
+        <% if current_user.admin? %><th class="text-left px-5 py-3">Borrower</th><% end %>
+        <th class="text-left px-5 py-3">Borrowed</th>
+        <th class="text-left px-5 py-3">Due</th>
+        <th class="text-left px-5 py-3">Status</th>
+        <th class="px-5 py-3"></th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-slate-100">
+      <% @borrowings.each do |b| %>
+        <tr>
+          <td class="px-5 py-4 font-medium text-slate-800"><%= link_to b.book.title, book_path(b.book), class: "hover:text-indigo-600" %></td>
+          <% if current_user.admin? %><td class="px-5 py-4 text-slate-600"><%= b.user.name %></td><% end %>
+          <td class="px-5 py-4 text-slate-500"><%= b.borrowed_at.strftime("%b %d, %Y") %></td>
+          <td class="px-5 py-4 text-slate-500"><%= b.due_date.strftime("%b %d, %Y") %></td>
+          <td class="px-5 py-4">
+            <% if b.returned? %>
+              <span class="text-xs font-medium bg-emerald-50 text-emerald-700 px-2 py-1 rounded-full">Returned</span>
+            <% elsif b.overdue? %>
+              <span class="text-xs font-medium bg-rose-50 text-rose-700 px-2 py-1 rounded-full">Overdue</span>
+            <% else %>
+              <span class="text-xs font-medium bg-amber-50 text-amber-700 px-2 py-1 rounded-full">Borrowed</span>
+            <% end %>
+          </td>
+          <td class="px-5 py-4 text-right">
+            <% if b.borrowed? %>
+              <%= button_to "Return", return_book_borrowing_path(b), method: :patch, class: "text-indigo-600 hover:text-indigo-800 font-medium text-sm bg-transparent p-0" %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<% if @borrowings.empty? %>
+  <div class="text-center py-16 text-slate-400">No borrowings yet.</div>
+<% end %>
+
+<div class="mt-8 flex justify-center"><%= paginate @borrowings %></div>

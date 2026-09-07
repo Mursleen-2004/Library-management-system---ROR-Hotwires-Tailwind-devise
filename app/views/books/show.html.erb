@@ -1,0 +1,53 @@
+<div class="mb-4">
+  <%= link_to "&larr; Back to books".html_safe, books_path, class: "text-sm text-slate-500 hover:text-indigo-600" %>
+</div>
+
+<div class="bg-white rounded-2xl border border-slate-200 p-8">
+  <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-bold text-slate-900"><%= @book.title %></h1>
+      <p class="text-slate-500 mt-1">by <%= @book.author.name %></p>
+      <div class="flex flex-wrap gap-2 mt-4">
+        <span class="text-xs font-medium bg-slate-100 text-slate-600 px-3 py-1 rounded-full"><%= @book.category.name %></span>
+        <% if @book.published_year %>
+          <span class="text-xs font-medium bg-slate-100 text-slate-600 px-3 py-1 rounded-full">Published <%= @book.published_year %></span>
+        <% end %>
+        <% if @book.isbn.present? %>
+          <span class="text-xs font-medium bg-slate-100 text-slate-600 px-3 py-1 rounded-full">ISBN <%= @book.isbn %></span>
+        <% end %>
+      </div>
+    </div>
+
+    <% if user_signed_in? && current_user.admin? %>
+      <div class="flex gap-2 shrink-0">
+        <%= link_to "Edit", edit_book_path(@book), class: "text-sm font-medium border border-slate-200 px-4 py-2 rounded-lg hover:bg-slate-50" %>
+        <%= button_to "Delete", book_path(@book), method: :delete,
+              form: { data: { turbo_confirm: "Delete this book permanently?" } },
+              class: "text-sm font-medium border border-rose-200 text-rose-600 px-4 py-2 rounded-lg hover:bg-rose-50" %>
+      </div>
+    <% end %>
+  </div>
+
+  <p class="text-slate-600 mt-6 leading-relaxed"><%= @book.description.presence || "No description available." %></p>
+
+  <div class="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between">
+    <div class="text-sm text-slate-500">
+      <span class="font-medium text-slate-800"><%= @book.available_copies %></span> of <%= @book.total_copies %> copies available
+    </div>
+
+    <% if user_signed_in? %>
+      <% if current_user.admin? %>
+        <span class="text-sm text-slate-400">Admins manage the catalog, not borrow books.</span>
+      <% elsif @already_borrowed %>
+        <span class="text-sm font-medium text-amber-600">You currently have this book checked out</span>
+      <% elsif @book.available? %>
+        <%= button_to "Borrow this book", book_borrowings_path(@book), method: :post,
+              class: "bg-indigo-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-indigo-500 text-sm" %>
+      <% else %>
+        <span class="text-sm font-medium text-rose-500">No copies currently available</span>
+      <% end %>
+    <% else %>
+      <%= link_to "Sign in to borrow", new_user_session_path, class: "bg-indigo-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-indigo-500 text-sm" %>
+    <% end %>
+  </div>
+</div>

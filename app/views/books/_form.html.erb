@@ -1,0 +1,64 @@
+<%= form_with model: book, class: "space-y-5 bg-white rounded-2xl border border-slate-200 p-8" do |f| %>
+  <% if book.errors.any? %>
+    <div class="rounded-lg bg-rose-50 border border-rose-200 text-rose-700 px-4 py-3 text-sm">
+      <p class="font-medium mb-1"><%= pluralize(book.errors.count, "error") %> prevented this book from saving:</p>
+      <ul class="list-disc list-inside">
+        <% book.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :title, class: "block text-sm font-medium text-slate-700 mb-1" %>
+    <%= f.text_field :title, class: "w-full rounded-lg border px-3 py-2 text-slate-900 border-slate-300 bg-white focus:ring-indigo-500 focus:border-indigo-500" %>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+    <div>
+      <%= f.label :author_id, "Author", class: "block text-sm font-medium text-slate-700 mb-1" %>
+      <%= f.collection_select :author_id, @authors, :id, :name, { prompt: "Select an author" }, class: "w-full rounded-lg border px-3 py-2 text-slate-900 border-slate-300 bg-white focus:ring-indigo-500 focus:border-indigo-500" %>
+    </div>
+    <div>
+      <%= f.label :category_id, "Category", class: "block text-sm font-medium text-slate-700 mb-1" %>
+      <%= f.collection_select :category_id, @categories, :id, :name, { prompt: "Select a category" }, class: "w-full rounded-lg border px-3 py-2 text-slate-900 border-slate-300 bg-white focus:ring-indigo-500 focus:border-indigo-500" %>
+    </div>
+  </div>
+
+  <div>
+    <%= f.label :description, class: "block text-sm font-medium text-slate-700 mb-1" %>
+    <%= f.text_area :description, rows: 4, class: "w-full rounded-lg border px-3 py-2 text-slate-900 border-slate-300 bg-white focus:ring-indigo-500 focus:border-indigo-500" %>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+    <div>
+      <%= f.label :isbn, "ISBN", class: "block text-sm font-medium text-slate-700 mb-1" %>
+      <%= f.text_field :isbn, class: "w-full rounded-lg border px-3 py-2 text-slate-900 border-slate-300 bg-white focus:ring-indigo-500 focus:border-indigo-500" %>
+    </div>
+    <div>
+      <%= f.label :published_year, class: "block text-sm font-medium text-slate-700 mb-1" %>
+      <%= f.number_field :published_year, class: "w-full rounded-lg border px-3 py-2 text-slate-900 border-slate-300 bg-white focus:ring-indigo-500 focus:border-indigo-500" %>
+    </div>
+    <div>
+      <%= f.label :total_copies, class: "block text-sm font-medium text-slate-700 mb-1" %>
+      <%= f.number_field :total_copies, min: 0, class: "w-full rounded-lg border px-3 py-2 text-slate-900 border-slate-300 bg-white focus:ring-indigo-500 focus:border-indigo-500" %>
+    </div>
+  </div>
+
+  <% if book.persisted? %>
+    <div>
+      <%= f.label :available_copies, class: "block text-sm font-medium text-slate-700 mb-1" %>
+      <%= f.number_field :available_copies, min: 0, class: "w-full rounded-lg border px-3 py-2 text-slate-900 border-slate-300 bg-white focus:ring-indigo-500 focus:border-indigo-500" %>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :cover_image_url, "Cover Image URL", class: "block text-sm font-medium text-slate-700 mb-1" %>
+    <%= f.text_field :cover_image_url, class: "w-full rounded-lg border px-3 py-2 text-slate-900 border-slate-300 bg-white focus:ring-indigo-500 focus:border-indigo-500" %>
+  </div>
+
+  <div class="pt-2">
+    <%= f.submit class: "bg-indigo-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-indigo-500 cursor-pointer" %>
+  </div>
+<% end %>
