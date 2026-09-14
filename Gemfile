@@ -40,4 +40,4 @@ end
 gem "tzinfo-data", platforms: %i[windows jruby]
 
 # Fix JSON.parse compatibility issue
-gem "json", "< 3.0"
+gem "json", "< 4.0"
