@@ -18,7 +18,7 @@ gem "bootsnap", require: false
 gem "devise", "~> 5.0"
 
 # Pagination
-gem "kaminari", "~> 1.2"
+gem "kaminari", "~> 1.3"
 
 # Image processing for Active Storage
 gem "image_processing", "~> 1.2"
